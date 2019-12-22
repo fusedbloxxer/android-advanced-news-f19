@@ -1,4 +1,4 @@
-package ro.atelieruldigital.news.model;
+package ro.atelieruldigital.news.model.db.entities;
 
 /*
 FORMAT:
@@ -20,21 +20,50 @@ articles": [
 
 */
 
-import androidx.room.Embedded;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
+@Entity(tableName = "articles")
 public class Article {
 
     @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "article_id")
     @SerializedName("serverId")
     private String id;
 
-    @Embedded(prefix = "source.")
+    @Ignore
     private Source source;
 
-    private String author, title, description, url, urlToImage, publishedAt, content;
+    private String author;
+
+    private String title;
+
+    private String description;
+
+    private String url;
+
+    private String urlToImage;
+
+    private String publishedAt;
+
+    private String content;
+
+    public void setId(@NotNull String id) {
+        this.id = id;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
 
     public Source getSource() {
         return source;
@@ -100,10 +129,11 @@ public class Article {
         this.content = content;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Article{" +
-                "source=" + source +
+                "id='" + id + '\'' +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +

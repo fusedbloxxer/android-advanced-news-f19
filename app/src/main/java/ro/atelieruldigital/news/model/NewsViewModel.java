@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import ro.atelieruldigital.news.model.db.entities.Article;
+import ro.atelieruldigital.news.model.db.entities.Source;
+
 public class NewsViewModel extends ViewModel {
     private NewsRepository newsRepository;
 
@@ -12,11 +15,11 @@ public class NewsViewModel extends ViewModel {
         newsRepository = new NewsRepository();
     }
 
-    public LiveData<List<Article>> queryArticles(String queryTarget) {
+    public LiveData<List<Article>> queryArticles(String... queryTarget) {
         return newsRepository.queryArticles(queryTarget);
     }
 
-    public LiveData<List<Article>> queryBitcoinArticles() {
-        return newsRepository.queryArticles("bitcoin");
+    public LiveData<List<Source>> querySourcesByCategory(String... queryTarget) {
+        return newsRepository.querySourcesByCategory(queryTarget);
     }
 }

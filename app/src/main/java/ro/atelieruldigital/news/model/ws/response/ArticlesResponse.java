@@ -1,15 +1,14 @@
-package ro.atelieruldigital.news.model;
+package ro.atelieruldigital.news.model.ws.response;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class NewsListResponse {
-    private String status;
+import ro.atelieruldigital.news.model.db.entities.Article;
+
+public class ArticlesResponse extends Response {
     private int totalResults;
     private List<Article> articles;
-
-    public String getStatus() {
-        return status;
-    }
 
     public int getTotalResults() {
         return totalResults;
@@ -19,10 +18,10 @@ public class NewsListResponse {
         return articles;
     }
 
+    @NotNull
     @Override
     public String toString() {
-        return "NewsListResponse{" +
-                "status='" + status + '\'' +
+        return "ArticlesResponse{" + super.toString() +
                 ", totalResults=" + totalResults +
                 ", articles=" + articles +
                 '}';

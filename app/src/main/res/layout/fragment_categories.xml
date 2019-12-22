@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="newsViewModel"
+            type="ro.atelieruldigital.news.model.NewsViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".home.categories.CategoriesFragment">
+
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@{newsViewModel.querySourcesByCategory(&quot;entertainment&quot;, &quot;general&quot;, &quot;technology&quot;).toString()}" />
+
+    </FrameLayout>
+</layout>
