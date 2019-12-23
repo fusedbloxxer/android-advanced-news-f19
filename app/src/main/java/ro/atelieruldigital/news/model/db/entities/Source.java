@@ -19,8 +19,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import org.jetbrains.annotations.NotNull;
-
 @Entity(tableName = "sources", foreignKeys = {
         @ForeignKey(entity = Category.class,
                 parentColumns = "category_id",
@@ -53,6 +51,16 @@ public class Source {
 
     @ColumnInfo(name = "country_id")
     private String country;
+
+    public Source(@NonNull String id, String name, String description, String url, String category, String language, String country) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.url = url;
+        this.category = category;
+        this.language = language;
+        this.country = country;
+    }
 
     @NonNull
     public String getId() {
@@ -111,7 +119,6 @@ public class Source {
         this.country = country;
     }
 
-    @NotNull
     @Override
     public String toString() {
         return "Source{" +

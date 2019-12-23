@@ -5,15 +5,18 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "languages")
-public class Language {
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "authors")
+public class Author {
 
     @NonNull
     @PrimaryKey
-    @ColumnInfo(name = "language_id")
+    @SerializedName("author")
+    @ColumnInfo(name = "author_id")
     private String id;
 
-    public Language(@NonNull String id) {
+    public Author(@NonNull String id) {
         this.id = id;
     }
 
@@ -28,7 +31,7 @@ public class Language {
 
     @Override
     public String toString() {
-        return "Language{" +
+        return "Author{" +
                 "id='" + id + '\'' +
                 '}';
     }

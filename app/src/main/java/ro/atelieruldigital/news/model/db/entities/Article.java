@@ -25,23 +25,38 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.jetbrains.annotations.NotNull;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import ro.atelieruldigital.news.model.db.converters.DateConverter;
 
 @Entity(tableName = "articles")
 public class Article {
 
-    @PrimaryKey
+    public static final DateFormat dateFormat =
+            new SimpleDateFormat("yyyy-MM-DD'T'HH:mm:ss'Z'", Locale.ENGLISH);
+
     @NonNull
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "article_id")
     @SerializedName("serverId")
-    private String id;
+    private int id;
+
+
+    @ColumnInfo(name = "published_at")
+    @TypeConverters(DateConverter.class)
+    private Date published;
 
     @Ignore
     private Source source;
 
+    @Ignore
     private String author;
 
     private String title;
@@ -52,17 +67,25 @@ public class Article {
 
     private String urlToImage;
 
+    @Ignore
     private String publishedAt;
 
     private String content;
 
-    public void setId(@NotNull String id) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
     }
 
-    @NonNull
-    public String getId() {
-        return id;
+    public Date getPublished() {
+        return published;
+    }
+
+    public void setPublished(Date published) {
+        this.published = published;
     }
 
     public Source getSource() {
@@ -129,11 +152,12 @@ public class Article {
         this.content = content;
     }
 
-    @NotNull
     @Override
     public String toString() {
         return "Article{" +
-                "id='" + id + '\'' +
+                "id=" + id +
+                ", published=" + published +
+                ", source=" + source +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +

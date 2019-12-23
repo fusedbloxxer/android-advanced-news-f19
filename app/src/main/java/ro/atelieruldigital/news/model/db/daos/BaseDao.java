@@ -1,5 +1,6 @@
 package ro.atelieruldigital.news.model.db.daos;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -7,31 +8,32 @@ import androidx.room.Update;
 
 import java.util.List;
 
-public interface BaseDao <T> {
+@Dao
+public interface BaseDao<T> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertArticle(T article);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertArticles(T... articles);
+    void insertObject(T object);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertArticles(List<T> articles);
+    void insertObjects(T... objects);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertObjects(List<T> objects);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateArticle(T article);
+    void updateObject(T object);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateArticles(T... articles);
+    void updateObjects(T... objects);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateArticles(List<T> articles);
+    void updateObjects(List<T> objects);
 
     @Delete
-    void deleteArticle(T article);
+    void deleteObject(T object);
 
     @Delete
-    void deleteArticles(T... articles);
+    void deleteObjects(T... objects);
 
     @Delete
-    void deleteArticles(List<T> articles);
+    void deleteObjects(List<T> objects);
 }

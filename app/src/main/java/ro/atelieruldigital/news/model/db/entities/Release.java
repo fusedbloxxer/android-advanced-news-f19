@@ -5,28 +5,28 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-@Entity(tableName = "articles_sources",
-        primaryKeys = {"article_id", "source_id"},
+@Entity(tableName = "releases",
+        primaryKeys = {"article_id", "author_id"},
         foreignKeys = {
                 @ForeignKey(entity = Article.class,
                         parentColumns = "article_id",
                         childColumns = "article_id"),
-                @ForeignKey(entity = Source.class,
-                        parentColumns = "source_id",
-                        childColumns = "source_id")
+                @ForeignKey(entity = Author.class,
+                        parentColumns = "author_id",
+                        childColumns = "author_id")
         })
-public class ArticleSource {
+public class Release {
     @NonNull
     @ColumnInfo(name = "article_id")
     private String articleId;
 
     @NonNull
-    @ColumnInfo(name = "source_id")
-    private String sourceId;
+    @ColumnInfo(name = "author_id")
+    private String authorId;
 
-    public ArticleSource(@NonNull String articleId, @NonNull String sourceId) {
+    public Release(@NonNull String articleId, @NonNull String authorId) {
         this.articleId = articleId;
-        this.sourceId = sourceId;
+        this.authorId = authorId;
     }
 
     @NonNull
@@ -39,19 +39,19 @@ public class ArticleSource {
     }
 
     @NonNull
-    public String getSourceId() {
-        return sourceId;
+    public String getAuthorId() {
+        return authorId;
     }
 
-    public void setSourceId(@NonNull String sourceId) {
-        this.sourceId = sourceId;
+    public void setAuthorId(@NonNull String authorId) {
+        this.authorId = authorId;
     }
 
     @Override
     public String toString() {
-        return "ArticleSource{" +
+        return "Release{" +
                 "articleId='" + articleId + '\'' +
-                ", sourceId='" + sourceId + '\'' +
+                ", authorId='" + authorId + '\'' +
                 '}';
     }
 }

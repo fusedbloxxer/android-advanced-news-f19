@@ -1,7 +1,8 @@
 package ro.atelieruldigital.news.model;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,6 +11,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ro.atelieruldigital.news.model.db.containers.CategoryArticle;
+import ro.atelieruldigital.news.model.db.database.NewsDatabase;
 import ro.atelieruldigital.news.model.db.entities.Article;
 import ro.atelieruldigital.news.model.db.entities.Source;
 import ro.atelieruldigital.news.model.ws.NewsWebService;
@@ -18,16 +21,16 @@ import ro.atelieruldigital.news.model.ws.response.SourcesResponse;
 import timber.log.Timber;
 
 public class NewsRepository {
-    // TODO: Add functionality according to API
     private NewsWebService newsWebService;
+    private NewsDatabase newsDatabase;
 
-    private MutableLiveData<List<Article>> articlesMutableLiveData;
-    private MutableLiveData<List<Source>> sourcesMutableLiveData;
-
-    public NewsRepository() {
+    public NewsRepository(final Context context) {
         newsWebService = new NewsWebService();
-        articlesMutableLiveData = new MutableLiveData<>();
-        sourcesMutableLiveData = new MutableLiveData<>();
+        newsDatabase = NewsDatabase.getInstance(context);
+    }
+
+    public LiveData<List<CategoryArticle>> getCategoriesWithArticles() {
+        return newsDatabase.articleDao().getCategoriesWithArticles();
     }
 
     public LiveData<List<Source>> querySourcesByCategory(String... queryTarget) {
@@ -40,7 +43,8 @@ public class NewsRepository {
                     Timber.d(response.toString());
                     // TODO: PUNE IN BAZA DE DATE;
                     if (response.body() != null) {
-                        sourcesMutableLiveData.setValue(response.body().getSources());
+                        NewsDatabase.getDatabaseWriteExecutor()
+                                .execute(() -> newsDatabase.sourceDao().insertObjects(response.body().getSources()));
                     }
                 } else {
                     Timber.d("Response wasn't successful.");
@@ -53,24 +57,21 @@ public class NewsRepository {
             }
         });
 
-        return sourcesMutableLiveData;
+        return newsDatabase.sourceDao().getSourcesByCategories(queryTarget);
     }
 
     public LiveData<List<Article>> queryArticles(String... queryTarget) {
-        Call<ArticlesResponse> responseCall = newsWebService.queryArticles();
+        Call<ArticlesResponse> responseCall = newsWebService.queryArticles(queryTarget);
 
         responseCall.enqueue(new Callback<ArticlesResponse>() {
             @Override
             public void onResponse(@NotNull Call<ArticlesResponse> call, @NotNull Response<ArticlesResponse> response) {
-                if (response.isSuccessful()) {
-                    Timber.d(response.toString());
-                    // TODO: PUNE IN BAZA DE DATE;
-                    if (response.body() != null) {
-                        articlesMutableLiveData.setValue(response.body().getArticles());
-                    }
-                } else {
-                    Timber.d("Response wasn't successful.");
+                // TODO: PUNE IN BAZA DE DATE;
+                if (response.isSuccessful() && response.body() != null) {
+                    NewsDatabase.getDatabaseWriteExecutor()
+                            .execute(() -> newsDatabase.articleDao().insertObjects(response.body().getArticles()));
                 }
+                Timber.d("RESPONSE: %s", response.toString());
             }
 
             @Override
@@ -79,6 +80,6 @@ public class NewsRepository {
             }
         });
 
-        return articlesMutableLiveData;
+        return newsDatabase.articleDao().getAllArticles();
     }
 }

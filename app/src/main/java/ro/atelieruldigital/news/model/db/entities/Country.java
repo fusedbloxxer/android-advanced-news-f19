@@ -13,6 +13,10 @@ public class Country {
     @ColumnInfo(name = "country_id")
     private String id;
 
+    public Country(@NonNull String id) {
+        this.id = id;
+    }
+
     @NonNull
     public String getId() {
         return id;
@@ -20,5 +24,12 @@ public class Country {
 
     public void setId(@NonNull String id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }

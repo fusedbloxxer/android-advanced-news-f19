@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-        <variable
-            name="newsViewModel"
-            type="ro.atelieruldigital.news.model.NewsViewModel" />
-    </data>
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".home.categories.CategoriesFragment">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <!-- TODO: Update blank fragment layout -->
         <TextView
+            android:id="@+id/test_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categories_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@{newsViewModel.querySourcesByCategory(&quot;entertainment&quot;, &quot;general&quot;, &quot;technology&quot;).toString()}" />
+            android:visibility="gone" />
 
-    </FrameLayout>
-</layout>
+    </LinearLayout>
+</ScrollView>
