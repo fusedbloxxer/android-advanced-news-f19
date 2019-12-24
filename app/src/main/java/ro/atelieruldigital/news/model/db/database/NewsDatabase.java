@@ -9,27 +9,25 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ro.atelieruldigital.news.model.db.converters.DateConverter;
 import ro.atelieruldigital.news.model.db.daos.ArticleDao;
-import ro.atelieruldigital.news.model.db.daos.AuthorDao;
 import ro.atelieruldigital.news.model.db.daos.CategoryDao;
 import ro.atelieruldigital.news.model.db.daos.CountryDao;
 import ro.atelieruldigital.news.model.db.daos.LanguageDao;
 import ro.atelieruldigital.news.model.db.daos.SourceDao;
 import ro.atelieruldigital.news.model.db.entities.Article;
-import ro.atelieruldigital.news.model.db.entities.ArticleSource;
-import ro.atelieruldigital.news.model.db.entities.Author;
 import ro.atelieruldigital.news.model.db.entities.Category;
 import ro.atelieruldigital.news.model.db.entities.Country;
 import ro.atelieruldigital.news.model.db.entities.Language;
-import ro.atelieruldigital.news.model.db.entities.Release;
 import ro.atelieruldigital.news.model.db.entities.Source;
 
-@Database(entities = {Article.class, ArticleSource.class, Author.class, Release.class, Source.class,
-        Language.class, Category.class, Country.class}, version = 1, exportSchema = false)
+@Database(entities = {Article.class, Source.class, Language.class, Category.class,
+        Country.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class NewsDatabase extends RoomDatabase {
     private static volatile NewsDatabase INSTANCE;
@@ -38,8 +36,6 @@ public abstract class NewsDatabase extends RoomDatabase {
 
     private static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-
-    public abstract AuthorDao authorDao();
 
     public abstract SourceDao sourceDao();
 
@@ -55,138 +51,147 @@ public abstract class NewsDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (NewsDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            NewsDatabase.class, "news_database")
-                            .fallbackToDestructiveMigration()
-                            .addCallback(sRoomDatabaseCallback)
-                            .build();
+                    INSTANCE = buildDatabase(context);
                 }
             }
         }
         return INSTANCE;
     }
 
+    @NotNull
+    private static NewsDatabase buildDatabase(final Context context) {
+        return Room.databaseBuilder(context.getApplicationContext(),
+                NewsDatabase.class, "news_database")
+                .fallbackToDestructiveMigration()
+                .addCallback(new Callback() {
+                    @Override
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                        super.onCreate(db);
+                        databaseWriteExecutor.execute(() -> {
+                            getInstance(context).categoryDao().insertObjects(populateCategories());
+                            getInstance(context).countryDao().insertObjects(populateCountries());
+                            getInstance(context).languageDao().insertObjects(populateLanguages());
+                        });
+                    }
+                })
+                .build();
+    }
+
     public static ExecutorService getDatabaseWriteExecutor() {
         return databaseWriteExecutor;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
+    private static Country[] populateCountries() {
+        return new Country[]{
+                new Country("ae"),
+                new Country("ar"),
+                new Country("at"),
+                new Country("au"),
 
-            databaseWriteExecutor.execute(() -> {
-                insertCountries();
-                insertLanguages();
-                insertCategories();
-            });
-        }
+                new Country("be"),
+                new Country("bg"),
+                new Country("br"),
 
-        private void insertCountries() {
-            CountryDao countryDao = INSTANCE.countryDao();
+                new Country("ca"),
+                new Country("ch"),
+                new Country("cn"),
+                new Country("co"),
+                new Country("cu"),
+                new Country("cz"),
 
-            countryDao.insertObject(new Country("ae"));
-            countryDao.insertObject(new Country("ar"));
-            countryDao.insertObject(new Country("at"));
-            countryDao.insertObject(new Country("au"));
+                new Country("de"),
 
-            countryDao.insertObject(new Country("be"));
-            countryDao.insertObject(new Country("bg"));
-            countryDao.insertObject(new Country("br"));
+                new Country("eg"),
+                new Country("es"),
 
-            countryDao.insertObject(new Country("ca"));
-            countryDao.insertObject(new Country("ch"));
-            countryDao.insertObject(new Country("cn"));
-            countryDao.insertObject(new Country("co"));
-            countryDao.insertObject(new Country("cu"));
-            countryDao.insertObject(new Country("cz"));
+                new Country("fr"),
 
-            countryDao.insertObject(new Country("de"));
+                new Country("gb"),
+                new Country("gr"),
 
-            countryDao.insertObject(new Country("eg"));
+                new Country("hk"),
+                new Country("hu"),
 
-            countryDao.insertObject(new Country("fr"));
+                new Country("id"),
+                new Country("ie"),
+                new Country("il"),
+                new Country("in"),
+                new Country("it"),
+                new Country("is"),
 
-            countryDao.insertObject(new Country("gb"));
-            countryDao.insertObject(new Country("gr"));
+                new Country("jp"),
 
-            countryDao.insertObject(new Country("hk"));
-            countryDao.insertObject(new Country("hu"));
+                new Country("kr"),
 
-            countryDao.insertObject(new Country("id"));
-            countryDao.insertObject(new Country("ie"));
-            countryDao.insertObject(new Country("il"));
-            countryDao.insertObject(new Country("in"));
-            countryDao.insertObject(new Country("it"));
+                new Country("lt"),
+                new Country("lv"),
 
-            countryDao.insertObject(new Country("jp"));
+                new Country("ma"),
+                new Country("mx"),
+                new Country("my"),
 
-            countryDao.insertObject(new Country("kr"));
+                new Country("ng"),
+                new Country("nl"),
+                new Country("no"),
+                new Country("nz"),
 
-            countryDao.insertObject(new Country("lt"));
-            countryDao.insertObject(new Country("lv"));
+                new Country("ph"),
+                new Country("pl"),
+                new Country("pt"),
+                new Country("pk"),
 
-            countryDao.insertObject(new Country("ma"));
-            countryDao.insertObject(new Country("mx"));
-            countryDao.insertObject(new Country("my"));
+                new Country("ro"),
+                new Country("rs"),
+                new Country("ru"),
 
-            countryDao.insertObject(new Country("ng"));
-            countryDao.insertObject(new Country("nl"));
-            countryDao.insertObject(new Country("no"));
-            countryDao.insertObject(new Country("nz"));
+                new Country("sa"),
+                new Country("se"),
+                new Country("sg"),
+                new Country("si"),
+                new Country("sk"),
 
-            countryDao.insertObject(new Country("ph"));
-            countryDao.insertObject(new Country("pl"));
-            countryDao.insertObject(new Country("pt"));
+                new Country("th"),
+                new Country("tr"),
+                new Country("tw"),
 
-            countryDao.insertObject(new Country("ro"));
-            countryDao.insertObject(new Country("rs"));
-            countryDao.insertObject(new Country("ru"));
+                new Country("ua"),
+                new Country("us"),
 
-            countryDao.insertObject(new Country("sa"));
-            countryDao.insertObject(new Country("se"));
-            countryDao.insertObject(new Country("sg"));
-            countryDao.insertObject(new Country("si"));
-            countryDao.insertObject(new Country("sk"));
+                new Country("ve"),
 
-            countryDao.insertObject(new Country("th"));
-            countryDao.insertObject(new Country("tr"));
-            countryDao.insertObject(new Country("tw"));
+                new Country("za"),
+                new Country("zh")
+        };
+    }
 
-            countryDao.insertObject(new Country("ua"));
-            countryDao.insertObject(new Country("us"));
+    private static Language[] populateLanguages() {
+        return new Language[]{
+                new Language("ar"),
+                new Language("de"),
+                new Language("en"),
+                new Language("es"),
+                new Language("fr"),
+                new Language("he"),
+                new Language("it"),
+                new Language("nl"),
+                new Language("no"),
+                new Language("pt"),
+                new Language("ru"),
+                new Language("se"),
+                new Language("ud"),
+                new Language("zh")
+        };
+    }
 
-            countryDao.insertObject(new Country("ve"));
-            countryDao.insertObject(new Country("zh"));
-        }
-
-        private void insertLanguages() {
-            LanguageDao languageDao = INSTANCE.languageDao();
-            languageDao.insertObject(new Language("ar"));
-            languageDao.insertObject(new Language("de"));
-            languageDao.insertObject(new Language("en"));
-            languageDao.insertObject(new Language("es"));
-            languageDao.insertObject(new Language("fr"));
-            languageDao.insertObject(new Language("he"));
-            languageDao.insertObject(new Language("it"));
-            languageDao.insertObject(new Language("nl"));
-            languageDao.insertObject(new Language("no"));
-            languageDao.insertObject(new Language("pt"));
-            languageDao.insertObject(new Language("ru"));
-            languageDao.insertObject(new Language("se"));
-            languageDao.insertObject(new Language("ud"));
-            languageDao.insertObject(new Language("zh"));
-        }
-
-        private void insertCategories() {
-            CategoryDao categoryDao = INSTANCE.categoryDao();
-            categoryDao.insertObject(new Category("business"));
-            categoryDao.insertObject(new Category("entertainment"));
-            categoryDao.insertObject(new Category("general"));
-            categoryDao.insertObject(new Category("health"));
-            categoryDao.insertObject(new Category("science"));
-            categoryDao.insertObject(new Category("sports"));
-            categoryDao.insertObject(new Category("technology"));
-        }
-    };
+    private static Category[] populateCategories() {
+        return new Category[]{
+                new Category("business"),
+                new Category("entertainment"),
+                new Category("general"),
+                new Category("health"),
+                new Category("science"),
+                new Category("sports"),
+                new Category("technology")
+        };
+    }
 }

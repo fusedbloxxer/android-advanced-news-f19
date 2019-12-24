@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/countries"
-        android:name="ro.atelieruldigital.news.home.categories.CountriesFragment"
+        android:name="ro.atelieruldigital.news.home.countries.CountriesFragment"
         android:label="News by countries"
         tools:layout="@layout/fragment_countries" />
 

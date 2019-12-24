@@ -9,7 +9,7 @@ import androidx.room.Update;
 import java.util.List;
 
 @Dao
-public interface BaseDao<T> {
+public interface IBaseDao<T> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertObject(T object);
 

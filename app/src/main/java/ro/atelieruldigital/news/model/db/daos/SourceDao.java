@@ -9,7 +9,7 @@ import java.util.List;
 import ro.atelieruldigital.news.model.db.entities.Source;
 
 @Dao
-public interface SourceDao extends BaseDao<Source> {
+public interface SourceDao extends IBaseDao<Source> {
     @Query("SELECT * " +
             "FROM sources")
     LiveData<List<Source>> getAllSources();

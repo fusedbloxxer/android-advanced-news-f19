@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 @Entity(tableName = "countries")
-public class Country {
+public class Country implements IUId<String> {
 
     @NonNull
     @PrimaryKey
@@ -26,6 +28,7 @@ public class Country {
         this.id = id;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Country{" +

@@ -10,6 +10,9 @@ import ro.atelieruldigital.news.model.ws.response.SourcesResponse;
 
 public class NewsWebService {
     private static final String API_KEY = "00d2ab26016f475eac3512ab6e0a9528";
+    public static final String MAX_PAGE_SIZE = "100";
+    public static final int MAX_SOURCES = 20;
+
     private NewsApi newsApi;
 
     public NewsWebService() {
@@ -22,53 +25,53 @@ public class NewsWebService {
     }
 
     public Call<ArticlesResponse> queryArticles(String... searchString) {
-        return newsApi.queryArticles(API_KEY, searchString);
+        return newsApi.queryArticles(API_KEY, MAX_PAGE_SIZE, searchString);
     }
 
-    public Call<ArticlesResponse> queryArticlesBySource(String... sources) {
-        return newsApi.queryArticlesBySource(API_KEY, sources);
+    public Call<ArticlesResponse> queryArticlesBySources(String... sources) {
+        return newsApi.queryArticlesBySources(API_KEY, MAX_PAGE_SIZE, sources);
     }
 
-    public Call<ArticlesResponse> queryArticlesByLanguage(String... languages) {
-        return newsApi.queryArticlesByLanguage(API_KEY, languages);
+    public Call<ArticlesResponse> queryArticlesByLanguages(String... languages) {
+        return newsApi.queryArticlesByLanguages(API_KEY, MAX_PAGE_SIZE, languages);
     }
 
     public Call<SourcesResponse> querySources() {
         return newsApi.querySources(API_KEY);
     }
 
-    public Call<SourcesResponse> querySourcesByLanguage(String... languages) {
-        return newsApi.querySourcesByLanguage(API_KEY, languages);
+    public Call<SourcesResponse> querySourcesByLanguages(String... languages) {
+        return newsApi.querySourcesByLanguages(API_KEY, languages);
     }
 
-    public Call<SourcesResponse> querySourcesByCountry(String... countries) {
-        return newsApi.querySourcesByCountry(API_KEY, countries);
+    public Call<SourcesResponse> querySourcesByCountries(String... countries) {
+        return newsApi.querySourcesByCountries(API_KEY, countries);
     }
 
-    public Call<SourcesResponse> querySourcesByCategory(String... categories) {
-        return newsApi.querySourcesByCategory(API_KEY, categories);
+    public Call<SourcesResponse> querySourcesByCategories(String... categories) {
+        return newsApi.querySourcesByCategories(API_KEY, categories);
     }
 
     private interface NewsApi {
         @GET("/v2/everything")
-        Call<ArticlesResponse> queryArticles(@Query("apiKey") String apiKey, @Query("q") String... searchString);
+        Call<ArticlesResponse> queryArticles(@Query("apiKey") String apiKey, @Query("pageSize") String pageSize, @Query("q") String... searchString);
 
         @GET("/v2/everything")
-        Call<ArticlesResponse> queryArticlesBySource(@Query("apiKey") String apiKey, @Query("source") String... sources);
+        Call<ArticlesResponse> queryArticlesBySources(@Query("apiKey") String apiKey, @Query("pageSize") String pageSize, @Query("sources") String... sources);
 
         @GET("/v2/everything")
-        Call<ArticlesResponse> queryArticlesByLanguage(@Query("apiKey") String apiKey, @Query("language") String... languages);
+        Call<ArticlesResponse> queryArticlesByLanguages(@Query("apiKey") String apiKey, @Query("pageSize") String pageSize, @Query("language") String... languages);
 
         @GET("/v2/sources")
         Call<SourcesResponse> querySources(@Query("apiKey") String apiKey);
 
         @GET("/v2/sources")
-        Call<SourcesResponse> querySourcesByCountry(@Query("apiKey") String apiKey, @Query("country") String... countries);
+        Call<SourcesResponse> querySourcesByCountries(@Query("apiKey") String apiKey, @Query("country") String... countries);
 
         @GET("/v2/sources")
-        Call<SourcesResponse> querySourcesByLanguage(@Query("apiKey") String apiKey, @Query("language") String... languages);
+        Call<SourcesResponse> querySourcesByLanguages(@Query("apiKey") String apiKey, @Query("language") String... languages);
 
         @GET("/v2/sources")
-        Call<SourcesResponse> querySourcesByCategory(@Query("apiKey") String apiKey, @Query("category") String... categories);
+        Call<SourcesResponse> querySourcesByCategories(@Query("apiKey") String apiKey, @Query("category") String... categories);
     }
 }

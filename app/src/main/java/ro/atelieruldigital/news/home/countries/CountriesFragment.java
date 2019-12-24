@@ -1,4 +1,4 @@
-package ro.atelieruldigital.news.home.categories;
+package ro.atelieruldigital.news.home.countries;
 
 
 import android.os.Bundle;

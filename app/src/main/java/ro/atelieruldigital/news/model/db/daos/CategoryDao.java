@@ -9,7 +9,7 @@ import java.util.List;
 import ro.atelieruldigital.news.model.db.entities.Category;
 
 @Dao
-public interface CategoryDao extends BaseDao<Category> {
+public interface CategoryDao extends IBaseDao<Category> {
     @Query("SELECT * FROM categories")
     LiveData<List<Category>> getAllCategories();
 }

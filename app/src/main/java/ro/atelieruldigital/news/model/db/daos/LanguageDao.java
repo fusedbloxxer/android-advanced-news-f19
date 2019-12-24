@@ -9,7 +9,7 @@ import java.util.List;
 import ro.atelieruldigital.news.model.db.entities.Language;
 
 @Dao
-public interface LanguageDao extends BaseDao<Language> {
+public interface LanguageDao extends IBaseDao<Language> {
     @Query("SELECT * FROM languages")
     LiveData<List<Language>> getAllLanguages();
 }

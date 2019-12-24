@@ -19,6 +19,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 @Entity(tableName = "sources", foreignKeys = {
         @ForeignKey(entity = Category.class,
                 parentColumns = "category_id",
@@ -30,7 +32,7 @@ import androidx.room.PrimaryKey;
                 parentColumns = "country_id",
                 childColumns = "country_id")
 })
-public class Source {
+public class Source implements IUId<String> {
 
     @NonNull
     @PrimaryKey
@@ -119,6 +121,7 @@ public class Source {
         this.country = country;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Source{" +
@@ -129,6 +132,6 @@ public class Source {
                 ", category='" + category + '\'' +
                 ", language='" + language + '\'' +
                 ", country='" + country + '\'' +
-                '}';
+                '}' + '\n';
     }
 }

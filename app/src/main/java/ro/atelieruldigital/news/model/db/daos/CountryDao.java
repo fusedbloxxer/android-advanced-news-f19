@@ -9,7 +9,7 @@ import java.util.List;
 import ro.atelieruldigital.news.model.db.entities.Country;
 
 @Dao
-public interface CountryDao extends BaseDao<Country> {
+public interface CountryDao extends IBaseDao<Country> {
     @Query("SELECT * FROM countries")
     LiveData<List<Country>> getAllCountries();
 }
