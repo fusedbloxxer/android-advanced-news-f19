@@ -5,25 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import ro.atelieruldigital.news.R;
 import ro.atelieruldigital.news.home.categories.viewholders.ArticleViewHolder;
 import ro.atelieruldigital.news.model.db.entities.Article;
 
-public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
-    private List<Article> articleList;
-
-    public ArticleAdapter(List<Article> articleList) {
-        this.articleList = articleList;
-    }
-
-    public ArticleAdapter() {
-        this(new ArrayList<>());
-    }
+public class ArticleAdapter extends SubAdapter<Article, ArticleViewHolder> {
 
     @NonNull
     @Override
@@ -35,7 +22,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
-        Article article = articleList.get(position);
+        Article article = manyList.get(position);
 
         holder.setAuthor(article.getAuthor());
         holder.setImage(article.getUrlToImage());
@@ -44,15 +31,5 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
         holder.setTitle(article.getTitle());
         holder.setUrl(article.getId());
         holder.setDescription(article.getDescription());
-    }
-
-    public void setArticleList(List<Article> articleList) {
-        this.articleList = articleList;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemCount() {
-        return articleList.size();
     }
 }

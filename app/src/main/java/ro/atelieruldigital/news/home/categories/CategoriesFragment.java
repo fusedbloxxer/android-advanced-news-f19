@@ -76,7 +76,7 @@ public class CategoriesFragment extends BaseFragment {
                                             .observe(owner, articles ->
                                                     newsViewModel
                                                             .getCategoriesWithArticles()
-                                                            .observe(owner, categoryWithArticleList -> mArticleAdapter.setCategoryWithArticles(CategoryWithArticle.transform(categoryWithArticleList))));
+                                                            .observe(owner, categoryWithArticleList -> mArticleAdapter.setOneToManyList(CategoryWithArticle.transform(categoryWithArticleList))));
                                 }));
     }
 }

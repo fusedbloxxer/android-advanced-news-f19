@@ -34,10 +34,10 @@ public class CategoryWithArticle {
         this.article = article;
     }
 
-    public static List<CategoryWithArticles> transform(List<CategoryWithArticle> categoryWithArticles) {
+    public static List<OneToMany<String, Article>> transform(List<CategoryWithArticle> categoryWithArticles) {
         Map<String, List<Article>> map = new HashMap<>();
 
-        List<CategoryWithArticles> articlesList = new ArrayList<>();
+        List<OneToMany<String, Article>> articlesList = new ArrayList<>();
 
         for (CategoryWithArticle e : categoryWithArticles) {
             if (map.containsKey(e.getCategory_id())) {
@@ -53,7 +53,7 @@ public class CategoryWithArticle {
         }
 
         for (Map.Entry<String, List<Article>> e : map.entrySet()) {
-            articlesList.add(new CategoryWithArticles(capitalize(e), e.getValue()));
+            articlesList.add(new OneToMany<>(capitalize(e), e.getValue()));
         }
 
         return articlesList;
