@@ -10,6 +10,6 @@ import ro.atelieruldigital.news.model.db.entities.Category;
 
 @Dao
 public interface CategoryDao extends IBaseDao<Category> {
-    @Query("SELECT * FROM categories")
+    @Query("SELECT * FROM categories ORDER BY category_id ASC")
     LiveData<List<Category>> getAllCategories();
 }

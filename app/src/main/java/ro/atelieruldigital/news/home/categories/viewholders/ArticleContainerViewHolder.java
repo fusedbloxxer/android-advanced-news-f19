@@ -10,12 +10,13 @@ import ro.atelieruldigital.news.home.categories.adapters.ArticleAdapter;
 import ro.atelieruldigital.news.home.generic.viewholders.OneToManyViewHolder;
 import ro.atelieruldigital.news.model.db.entities.Article;
 
+
 public class ArticleContainerViewHolder extends OneToManyViewHolder<String, Article, ArticleViewHolder> {
     private TextView mCategory;
 
     public ArticleContainerViewHolder(@NonNull View itemView) {
-        super(itemView, R.id.article_container_recycler_view, new ArticleAdapter(R.layout.item_article));
-        mCategory = itemView.findViewById(R.id.article_container_title);
+        super(itemView, R.id.container_recycler_view, new ArticleAdapter(R.layout.item_article));
+        mCategory = itemView.findViewById(R.id.container_title);
     }
 
     @Override

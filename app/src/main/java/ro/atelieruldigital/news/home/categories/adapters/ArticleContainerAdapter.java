@@ -17,7 +17,7 @@ public class ArticleContainerAdapter extends ContainerAdapter<String, Article, A
     @Override
     public ArticleContainerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_container_article, parent, false);
+                .inflate(R.layout.item_container, parent, false);
 
         return new ArticleContainerViewHolder(view);
     }

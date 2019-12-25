@@ -25,6 +25,17 @@
             android:icon="@drawable/ic_subscriptions_sources_black_24dp"
             android:title="@string/sources" />
 
+        <item
+            android:id="@+id/topics"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/topics" />
+
+        <item
+            android:id="@+id/filters"
+            android:icon="@drawable/ic_filter_list_black_24dp"
+            android:title="@string/filters" />
+
+
     </group>
 
 </menu>

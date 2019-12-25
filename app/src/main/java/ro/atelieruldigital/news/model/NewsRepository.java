@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -131,6 +132,52 @@ public class NewsRepository {
         return newsDatabase.sourceDao().getSourcesByCountries(countries);
     }
 
+    public LiveData<List<Article>> getArticlesByFilters(String[] languages, String[] categories, String[] countries, String[] sources) {
+        newsWebService.querySourcesByFilters(languages, categories, countries).enqueue(new Callback<SourcesResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<SourcesResponse> call, @NotNull Response<SourcesResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    NewsDatabase.getDatabaseWriteExecutor().execute(() -> {
+                        newsDatabase.sourceDao().insertObjects(
+                                response.body()
+                                        .getSources()
+                                        .stream()
+                                        .filter(source -> {
+                                            for (String s : sources) {
+                                                if (s.equals(source.getId())) {
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        })
+                                        .collect(Collectors.toList())
+                        );
+                        newsWebService.queryArticlesBySources(sources).enqueue(new Callback<ArticlesResponse>() {
+                            @Override
+                            public void onResponse(@NotNull Call<ArticlesResponse> call, @NotNull Response<ArticlesResponse> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    newsDatabase.articleDao().insertObjects(response.body().getArticles());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NotNull Call<ArticlesResponse> call, @NotNull Throwable t) {
+
+                            }
+                        });
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<SourcesResponse> call, @NotNull Throwable t) {
+
+            }
+        });
+
+        return newsDatabase.articleDao().getArticlesByFilters(languages, categories, countries, sources);
+    }
+
     public LiveData<List<Source>> querySourcesByCategories(String... categories) {
         newsWebService.querySourcesByCategories(categories).enqueue(new Callback<SourcesResponse>() {
             @Override
@@ -149,8 +196,8 @@ public class NewsRepository {
         return newsDatabase.sourceDao().getSourcesByCategories(categories);
     }
 
-    public LiveData<List<Article>> queryArticles(String... queryTarget) {
-        newsWebService.queryArticles(queryTarget).enqueue(new Callback<ArticlesResponse>() {
+    public LiveData<List<Article>> queryArticles(String keyword) {
+        newsWebService.queryArticles(keyword).enqueue(new Callback<ArticlesResponse>() {
             @Override
             public void onResponse(@NotNull Call<ArticlesResponse> call, @NotNull Response<ArticlesResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -165,6 +212,6 @@ public class NewsRepository {
 
         });
 
-        return newsDatabase.articleDao().getAllArticles();
+        return newsDatabase.articleDao().getArticlesByKeyword(keyword);
     }
 }

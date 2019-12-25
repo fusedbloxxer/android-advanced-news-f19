@@ -31,16 +31,30 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_categories_to_topics"
+            app:destination="@id/topics"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_categories_to_filters"
+            app:destination="@id/filters"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
-        android:id="@+id/languages"
+        android:id="@id/languages"
         android:name="ro.atelieruldigital.news.home.languages.LanguagesFragment"
         android:label="News by languages"
         tools:layout="@layout/fragment_tabs" />
 
     <fragment
-        android:id="@+id/countries"
+        android:id="@id/countries"
         android:name="ro.atelieruldigital.news.home.countries.CountriesFragment"
         android:label="News by countries"
         tools:layout="@layout/fragment_tabs" />
@@ -52,7 +66,7 @@
         tools:layout="@layout/fragment_with_list">
         <action
             android:id="@+id/action_sources_to_sourceArticlesFragment"
-            app:destination="@id/sourceArticles"
+            app:destination="@id/sourcesArticles"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -60,7 +74,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/sourceArticles"
+        android:id="@+id/sourcesArticles"
         android:name="ro.atelieruldigital.news.home.sources.SourceArticlesFragment"
         android:label="News by source"
         tools:layout="@layout/fragment_with_list">
@@ -68,5 +82,17 @@
             android:name="ARGS_KEY"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@id/topics"
+        android:name="ro.atelieruldigital.news.home.topic.TopicFragment"
+        android:label="News by topics"
+        tools:layout="@layout/fragment_topic" />
+
+    <fragment
+        android:id="@id/filters"
+        android:name="ro.atelieruldigital.news.home.filters.FiltersFragment"
+        android:label="News by filters"
+        tools:layout="@layout/fragment_filters" />
 
 </navigation>

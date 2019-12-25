@@ -10,6 +10,6 @@ import ro.atelieruldigital.news.model.db.entities.Country;
 
 @Dao
 public interface CountryDao extends IBaseDao<Country> {
-    @Query("SELECT * FROM countries")
+    @Query("SELECT * FROM countries ORDER BY country_id ASC")
     LiveData<List<Country>> getAllCountries();
 }

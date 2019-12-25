@@ -52,6 +52,10 @@ public class NewsWebService {
         return newsApi.querySourcesByCategories(API_KEY, categories);
     }
 
+    public Call<SourcesResponse> querySourcesByFilters(String[] languages, String[] categories, String[] countries) {
+        return newsApi.querySourcesByFilters(API_KEY, languages, categories, countries);
+    }
+
     private interface NewsApi {
         @GET("/v2/everything")
         Call<ArticlesResponse> queryArticles(@Query("apiKey") String apiKey, @Query("pageSize") String pageSize, @Query("q") String... searchString);
@@ -73,5 +77,8 @@ public class NewsWebService {
 
         @GET("/v2/sources")
         Call<SourcesResponse> querySourcesByCategories(@Query("apiKey") String apiKey, @Query("category") String... categories);
+
+        @GET("/v2/sources")
+        Call<SourcesResponse> querySourcesByFilters(@Query("apiKey") String apiKey, @Query("language") String[] languages, @Query("category") String[] categories, @Query("country") String[] countries);
     }
 }

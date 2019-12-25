@@ -6,4 +6,8 @@
     <string name="countries">Countries</string>
     <string name="sources">Sources</string>
     <string name="find_out_more_here">Find out more here</string>
+    <string name="search_topic">Search by topic</string>
+    <string name="topics">Topics</string>
+    <string name="filters">Filters</string>
+    <string name="filter_your_articles">Filter your articles</string>
 </resources>

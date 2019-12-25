@@ -24,8 +24,8 @@ public class NewsViewModel extends AndroidViewModel {
         newsRepository = new NewsRepository(application);
     }
 
-    public LiveData<List<Article>> queryArticles(String... q) {
-        return newsRepository.queryArticles(q);
+    public LiveData<List<Article>> queryArticles(String keyWord) {
+        return newsRepository.queryArticles(keyWord);
     }
 
     public LiveData<List<Language>> getAllLanguages() {
@@ -70,5 +70,9 @@ public class NewsViewModel extends AndroidViewModel {
 
     public LiveData<List<Source>> getSourcesByCountries(String... countries) {
         return newsRepository.querySourcesByCountries(countries);
+    }
+
+    public LiveData<List<Article>> getArticlesByFilters(String[] languages, String[] categories, String[] countries, String[] sources) {
+        return newsRepository.getArticlesByFilters(languages, categories, countries, sources);
     }
 }

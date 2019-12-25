@@ -7,7 +7,7 @@ public class OneToMany<One extends String, Many> {
 
     private List<Many> many;
 
-    OneToMany(One one, List<Many> many) {
+    public OneToMany(One one, List<Many> many) {
         this.one = one;
         this.many = many;
     }

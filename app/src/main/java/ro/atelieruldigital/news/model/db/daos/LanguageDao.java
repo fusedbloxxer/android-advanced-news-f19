@@ -10,6 +10,6 @@ import ro.atelieruldigital.news.model.db.entities.Language;
 
 @Dao
 public interface LanguageDao extends IBaseDao<Language> {
-    @Query("SELECT * FROM languages")
+    @Query("SELECT * FROM languages ORDER BY language_id ASC")
     LiveData<List<Language>> getAllLanguages();
 }
