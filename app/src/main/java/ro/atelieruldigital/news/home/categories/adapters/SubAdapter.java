@@ -7,13 +7,15 @@ import java.util.List;
 
 public abstract class SubAdapter<Many, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> {
     protected List<Many> manyList;
+    protected int layoutResourceId;
 
-    protected SubAdapter(List<Many> articleList) {
+    protected SubAdapter(int layoutResourceId, List<Many> articleList) {
         this.manyList = articleList;
+        this.layoutResourceId = layoutResourceId;
     }
 
-    protected SubAdapter() {
-        this(new ArrayList<>());
+    protected SubAdapter(int layoutResourceId) {
+        this(layoutResourceId, new ArrayList<>());
     }
 
     public void setManyList(List<Many> manyList) {

@@ -1,31 +1,25 @@
 package ro.atelieruldigital.news.home.countries;
 
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.fragment.app.Fragment;
 
-import ro.atelieruldigital.news.R;
-import ro.atelieruldigital.news.core.BaseFragment;
+import ro.atelieruldigital.news.home.generic.GenericTabsFragment;
+import ro.atelieruldigital.news.model.NewsViewModel;
+import ro.atelieruldigital.news.model.db.entities.Country;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CountriesFragment extends BaseFragment {
-
+public class CountriesFragment extends GenericTabsFragment<Country, CountryFragment> {
 
     public CountriesFragment() {
-        // Required empty public constructor
+        super(CountryFragment.class);
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_countries, container, false);
+    protected void setObservers(NewsViewModel newsViewModel) {
+        newsViewModel.getAllCountries()
+                .observe(this, countries -> mGenericFragmentAdapter.setList(countries));
     }
 }

@@ -47,6 +47,14 @@ public class NewsViewModel extends AndroidViewModel {
         return newsRepository.getCategoriesWithArticles();
     }
 
+    public LiveData<List<Article>> getArticlesByCountries(String... countries) {
+        return newsRepository.queryArticlesByCountries(countries);
+    }
+
+    public LiveData<List<Article>> getArticlesByLanguages(String... languages) {
+        return newsRepository.queryArticleByLanguages(languages);
+    }
+
     public LiveData<List<Article>> getArticlesBySources(String... sources) {
         return newsRepository.queryArticlesBySources(sources);
     }

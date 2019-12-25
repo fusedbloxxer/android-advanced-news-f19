@@ -11,9 +11,14 @@
             android:title="@string/categories" />
 
         <item
+            android:id="@+id/languages"
+            android:icon="@drawable/ic_language_black_24dp"
+            android:title="@string/languages" />
+
+        <item
             android:id="@+id/countries"
             android:icon="@drawable/ic_flag_black_24dp"
-            android:title="@string/countries" />
+            android:title="@string/languages" />
 
     </group>
 

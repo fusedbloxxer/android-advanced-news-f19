@@ -12,6 +12,13 @@
         tools:layout="@layout/fragment_categories">
         <action
             android:id="@+id/action_categoriesFragment_to_articleFragment"
+            app:destination="@id/languages"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_categories_to_countriesFragment"
             app:destination="@id/countries"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -20,9 +27,15 @@
     </fragment>
 
     <fragment
+        android:id="@+id/languages"
+        android:name="ro.atelieruldigital.news.home.languages.LanguagesFragment"
+        android:label="News by languages"
+        tools:layout="@layout/fragment_articles" />
+
+    <fragment
         android:id="@+id/countries"
         android:name="ro.atelieruldigital.news.home.countries.CountriesFragment"
         android:label="News by countries"
-        tools:layout="@layout/fragment_countries" />
+        tools:layout="@layout/fragment_countries_original" />
 
 </navigation>

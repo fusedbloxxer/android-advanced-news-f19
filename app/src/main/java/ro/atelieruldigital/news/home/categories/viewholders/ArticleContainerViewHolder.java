@@ -13,7 +13,7 @@ public class ArticleContainerViewHolder extends OneToManyViewHolder<String, Arti
     private TextView mCategory;
 
     public ArticleContainerViewHolder(@NonNull View itemView) {
-        super(itemView, R.id.article_container_recycler_view, new ArticleAdapter());
+        super(itemView, R.id.article_container_recycler_view, new ArticleAdapter(R.layout.item_article));
         mCategory = itemView.findViewById(R.id.article_container_title);
     }
 

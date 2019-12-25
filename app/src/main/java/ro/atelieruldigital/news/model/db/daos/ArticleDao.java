@@ -36,6 +36,12 @@ public interface ArticleDao extends IBaseDao<Article> {
     @Query("SELECT articles.* " +
             "FROM articles " +
             "JOIN sources USING(source_id) " +
+            "WHERE country_id IN (:countries)")
+    LiveData<List<Article>> getArticlesByCountries(String... countries);
+
+    @Query("SELECT articles.* " +
+            "FROM articles " +
+            "JOIN sources USING(source_id) " +
             "WHERE category_id IN (:categories)")
     LiveData<List<Article>> getArticlesByCategories(String... categories);
 

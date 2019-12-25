@@ -6,17 +6,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import ro.atelieruldigital.news.R;
 import ro.atelieruldigital.news.home.categories.viewholders.ArticleViewHolder;
 import ro.atelieruldigital.news.model.db.entities.Article;
 
 public class ArticleAdapter extends SubAdapter<Article, ArticleViewHolder> {
 
+    public ArticleAdapter(int layoutResourceId) {
+        super(layoutResourceId);
+    }
+
     @NonNull
     @Override
     public ArticleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_article, parent, false);
+                .inflate(layoutResourceId, parent, false);
         return new ArticleViewHolder(view);
     }
 

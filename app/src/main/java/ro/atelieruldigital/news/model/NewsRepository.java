@@ -47,6 +47,29 @@ public class NewsRepository {
         return newsDatabase.articleDao().getCategoriesWithArticles();
     }
 
+    public LiveData<List<Article>> queryArticlesByCountries(String... countries) {
+        return newsDatabase.articleDao().getArticlesByCountries(countries);// TODO: povestea ...
+    }
+
+    public LiveData<List<Article>> queryArticleByLanguages(String... languages) {
+        newsWebService.queryArticlesByLanguages(languages).enqueue(new Callback<ArticlesResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<ArticlesResponse> call, @NotNull Response<ArticlesResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    NewsDatabase.getDatabaseWriteExecutor()
+                            .execute(() -> newsDatabase.articleDao().insertObjects(response.body().getArticles()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<ArticlesResponse> call, @NotNull Throwable t) {
+
+            }
+        });
+
+        return newsDatabase.articleDao().getArticlesByLanguages(languages);
+    }
+
     public LiveData<List<Article>> queryArticlesBySources(String... sources) {
         newsWebService.queryArticlesBySources(sources).enqueue(new Callback<ArticlesResponse>() {
             @Override
