@@ -1,4 +1,4 @@
-package ro.atelieruldigital.news.home.categories.adapters;
+package ro.atelieruldigital.news.home.generic.adapters;
 
 import androidx.recyclerview.widget.RecyclerView;
 

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import ro.atelieruldigital.news.R;
 import ro.atelieruldigital.news.home.categories.adapters.ArticleAdapter;
+import ro.atelieruldigital.news.home.generic.viewholders.OneToManyViewHolder;
 import ro.atelieruldigital.news.model.db.entities.Article;
 
 public class ArticleContainerViewHolder extends OneToManyViewHolder<String, Article, ArticleViewHolder> {

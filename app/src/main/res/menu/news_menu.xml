@@ -18,7 +18,12 @@
         <item
             android:id="@+id/countries"
             android:icon="@drawable/ic_flag_black_24dp"
-            android:title="@string/languages" />
+            android:title="@string/countries" />
+
+        <item
+            android:id="@+id/sources"
+            android:icon="@drawable/ic_subscriptions_sources_black_24dp"
+            android:title="@string/sources" />
 
     </group>
 

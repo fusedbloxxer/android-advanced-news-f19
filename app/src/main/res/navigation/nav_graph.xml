@@ -9,7 +9,7 @@
         android:id="@id/categories"
         android:name="ro.atelieruldigital.news.home.categories.CategoriesFragment"
         android:label="News by categories"
-        tools:layout="@layout/fragment_categories">
+        tools:layout="@layout/fragment_with_list">
         <action
             android:id="@+id/action_categoriesFragment_to_articleFragment"
             app:destination="@id/languages"
@@ -24,18 +24,49 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_categories_to_sourcesFragment"
+            app:destination="@id/sources"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
         android:id="@+id/languages"
         android:name="ro.atelieruldigital.news.home.languages.LanguagesFragment"
         android:label="News by languages"
-        tools:layout="@layout/fragment_articles" />
+        tools:layout="@layout/fragment_tabs" />
 
     <fragment
         android:id="@+id/countries"
         android:name="ro.atelieruldigital.news.home.countries.CountriesFragment"
         android:label="News by countries"
-        tools:layout="@layout/fragment_countries_original" />
+        tools:layout="@layout/fragment_tabs" />
+
+    <fragment
+        android:id="@id/sources"
+        android:name="ro.atelieruldigital.news.home.sources.SourcesFragment"
+        android:label="News by sources"
+        tools:layout="@layout/fragment_with_list">
+        <action
+            android:id="@+id/action_sources_to_sourceArticlesFragment"
+            app:destination="@id/sourceArticles"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sourceArticles"
+        android:name="ro.atelieruldigital.news.home.sources.SourceArticlesFragment"
+        android:label="News by source"
+        tools:layout="@layout/fragment_with_list">
+        <argument
+            android:name="ARGS_KEY"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

@@ -19,6 +19,9 @@ public class LanguagesFragment extends GenericTabsFragment<Language, LanguageFra
     @Override
     protected void setObservers(NewsViewModel newsViewModel) {
         newsViewModel.getAllLanguages()
-                .observe(this, languages -> mGenericFragmentAdapter.setList(languages));
+                .observe(this, languages -> {
+                    mGenericFragmentAdapter.setList(languages);
+                    setCurrentTab();
+                });
     }
 }

@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ro.atelieruldigital.news.model.db.containers.CategoryWithArticle;
+import ro.atelieruldigital.news.model.db.containers.SourceWithArticles;
 import ro.atelieruldigital.news.model.db.database.NewsDatabase;
 import ro.atelieruldigital.news.model.db.entities.Article;
 import ro.atelieruldigital.news.model.db.entities.Category;
@@ -49,6 +50,10 @@ public class NewsRepository {
 
     public LiveData<List<Article>> queryArticlesByCountries(String... countries) {
         return newsDatabase.articleDao().getArticlesByCountries(countries);// TODO: povestea ...
+    }
+
+    public LiveData<List<SourceWithArticles>> getSourcesWithArticles() {
+        return newsDatabase.sourceDao().getSourcesWithArticles();
     }
 
     public LiveData<List<Article>> queryArticleByLanguages(String... languages) {
@@ -89,7 +94,7 @@ public class NewsRepository {
         return newsDatabase.articleDao().getArticlesBySources(sources);
     }
 
-    public LiveData<List<Source>> querySources() {
+    public LiveData<List<Source>> getAllSources() {
         newsWebService.querySources().enqueue(new Callback<SourcesResponse>() {
             @Override
             public void onResponse(@NotNull Call<SourcesResponse> call, @NotNull Response<SourcesResponse> response) {
@@ -105,6 +110,25 @@ public class NewsRepository {
         });
 
         return newsDatabase.sourceDao().getAllSources();
+    }
+
+    public LiveData<List<Source>> querySourcesByCountries(String... countries) {
+        newsWebService.querySourcesByCountries(countries).enqueue(new Callback<SourcesResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<SourcesResponse> call, @NotNull Response<SourcesResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    NewsDatabase.getDatabaseWriteExecutor()
+                            .execute(() -> newsDatabase.sourceDao().insertObjects(response.body().getSources()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<SourcesResponse> call, @NotNull Throwable t) {
+
+            }
+        });
+
+        return newsDatabase.sourceDao().getSourcesByCountries(countries);
     }
 
     public LiveData<List<Source>> querySourcesByCategories(String... categories) {

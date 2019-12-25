@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import ro.atelieruldigital.news.model.db.containers.CategoryWithArticle;
+import ro.atelieruldigital.news.model.db.containers.SourceWithArticles;
 import ro.atelieruldigital.news.model.db.entities.Article;
 import ro.atelieruldigital.news.model.db.entities.Category;
 import ro.atelieruldigital.news.model.db.entities.Country;
@@ -59,7 +60,15 @@ public class NewsViewModel extends AndroidViewModel {
         return newsRepository.queryArticlesBySources(sources);
     }
 
-    public LiveData<List<Source>> querySources() {
-        return newsRepository.querySources();
+    public LiveData<List<SourceWithArticles>> getSourcesWithArticles() {
+        return newsRepository.getSourcesWithArticles();
+    }
+
+    public LiveData<List<Source>> getAllSources() {
+        return newsRepository.getAllSources();
+    }
+
+    public LiveData<List<Source>> getSourcesByCountries(String... countries) {
+        return newsRepository.querySourcesByCountries(countries);
     }
 }

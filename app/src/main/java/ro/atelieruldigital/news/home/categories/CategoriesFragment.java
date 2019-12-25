@@ -1,9 +1,7 @@
 package ro.atelieruldigital.news.home.categories;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,34 +11,28 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
+import java.util.List;
 
 import ro.atelieruldigital.news.R;
-import ro.atelieruldigital.news.core.BaseFragment;
+import ro.atelieruldigital.news.core.LoadingFragment;
 import ro.atelieruldigital.news.home.categories.adapters.ArticleContainerAdapter;
 import ro.atelieruldigital.news.model.NewsViewModel;
 import ro.atelieruldigital.news.model.db.containers.CategoryWithArticle;
+import ro.atelieruldigital.news.model.db.containers.OneToMany;
+import ro.atelieruldigital.news.model.db.entities.Article;
 import ro.atelieruldigital.news.model.db.entities.IUId;
 import ro.atelieruldigital.news.model.ws.NewsWebService;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CategoriesFragment extends BaseFragment {
+public class CategoriesFragment extends LoadingFragment {
     private ArticleContainerAdapter mArticleAdapter;
     private RecyclerView mRecyclerView;
 
     public CategoriesFragment() {
-        // Required empty public constructor
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_categories, container, false);
+        super(R.layout.fragment_with_list);
     }
 
     @Override
@@ -53,7 +45,7 @@ public class CategoriesFragment extends BaseFragment {
     }
 
     private void initViews(View view) {
-        mRecyclerView = view.findViewById(R.id.categories_recycler_view);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
     }
 
     private void setUpViews() {
@@ -76,7 +68,11 @@ public class CategoriesFragment extends BaseFragment {
                                             .observe(owner, articles ->
                                                     newsViewModel
                                                             .getCategoriesWithArticles()
-                                                            .observe(owner, categoryWithArticleList -> mArticleAdapter.setOneToManyList(CategoryWithArticle.transform(categoryWithArticleList))));
+                                                            .observe(owner, categoryWithArticleList -> {
+                                                                List<OneToMany<String, Article>> oneToManyList = CategoryWithArticle.transform(categoryWithArticleList);
+                                                                mArticleAdapter.setOneToManyList(oneToManyList);
+                                                                setProgress(oneToManyList.size() != 0);
+                                                            }));
                                 }));
     }
 }

@@ -6,6 +6,7 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import ro.atelieruldigital.news.model.db.containers.SourceWithArticles;
 import ro.atelieruldigital.news.model.db.entities.Source;
 
 @Dao
@@ -28,4 +29,8 @@ public interface SourceDao extends IBaseDao<Source> {
             "FROM sources " +
             "WHERE country_id IN (:country)")
     LiveData<List<Source>> getSourcesByCountries(String... country);
+
+    @Query("SELECT * " +
+            "FROM sources")
+    LiveData<List<SourceWithArticles>> getSourcesWithArticles();
 }

@@ -20,6 +20,9 @@ public class CountriesFragment extends GenericTabsFragment<Country, CountryFragm
     @Override
     protected void setObservers(NewsViewModel newsViewModel) {
         newsViewModel.getAllCountries()
-                .observe(this, countries -> mGenericFragmentAdapter.setList(countries));
+                .observe(this, countries -> {
+                    mGenericFragmentAdapter.setList(countries);
+                    setCurrentTab();
+                });
     }
 }

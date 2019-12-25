@@ -15,9 +15,10 @@ public class SourceWithArticles {
     private Source source;
 
     @Relation(
-            parentColumn = "sources.source_id",
-            entityColumn = "articles.source_id"
+            parentColumn = "source_id",
+            entityColumn = "source_id"
     )
+
     private List<Article> articles;
 
     public Source getSource() {

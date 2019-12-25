@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import ro.atelieruldigital.news.model.db.entities.Article;
+import ro.atelieruldigital.news.utils.Utilities;
 
 public class CategoryWithArticle {
     private String category_id;
@@ -53,15 +54,10 @@ public class CategoryWithArticle {
         }
 
         for (Map.Entry<String, List<Article>> e : map.entrySet()) {
-            articlesList.add(new OneToMany<>(capitalize(e), e.getValue()));
+            articlesList.add(new OneToMany<>(Utilities.capitalize(e.getKey()), e.getValue()));
         }
 
         return articlesList;
-    }
-
-    @NotNull
-    private static String capitalize(Map.Entry<String, List<Article>> e) {
-        return e.getKey().substring(0, 1).toUpperCase() + e.getKey().substring(1);
     }
 
     @NotNull

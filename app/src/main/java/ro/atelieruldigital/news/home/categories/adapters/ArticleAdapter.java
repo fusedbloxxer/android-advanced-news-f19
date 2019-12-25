@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import ro.atelieruldigital.news.home.categories.viewholders.ArticleViewHolder;
+import ro.atelieruldigital.news.home.generic.adapters.SubAdapter;
 import ro.atelieruldigital.news.model.db.entities.Article;
 
 public class ArticleAdapter extends SubAdapter<Article, ArticleViewHolder> {

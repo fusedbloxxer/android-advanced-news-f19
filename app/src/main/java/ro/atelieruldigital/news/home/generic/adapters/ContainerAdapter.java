@@ -1,4 +1,4 @@
-package ro.atelieruldigital.news.home.categories.adapters;
+package ro.atelieruldigital.news.home.generic.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ro.atelieruldigital.news.home.categories.viewholders.ArticleViewHolder;
-import ro.atelieruldigital.news.home.categories.viewholders.OneToManyViewHolder;
+import ro.atelieruldigital.news.home.generic.viewholders.OneToManyViewHolder;
 import ro.atelieruldigital.news.model.db.containers.OneToMany;
 
 public abstract class ContainerAdapter<One extends String, Many, ViewHolder extends OneToManyViewHolder<One, Many, ArticleViewHolder>> extends RecyclerView.Adapter<ViewHolder> {
     private List<OneToMany<One, Many>> oneToManyList;
 
-    private ContainerAdapter(List<OneToMany<One, Many>> categoryWithArticles) {
+    protected ContainerAdapter(List<OneToMany<One, Many>> categoryWithArticles) {
         this.oneToManyList = categoryWithArticles;
     }
 
-    ContainerAdapter() {
+    protected ContainerAdapter() {
         this(new ArrayList<>());
     }
 

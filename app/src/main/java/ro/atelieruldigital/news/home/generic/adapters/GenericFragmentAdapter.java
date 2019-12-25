@@ -1,4 +1,4 @@
-package ro.atelieruldigital.news.home.generic;
+package ro.atelieruldigital.news.home.generic.adapters;
 
 import android.os.Bundle;
 
@@ -9,6 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import ro.atelieruldigital.news.home.generic.GenericArticlesFragment;
 import ro.atelieruldigital.news.model.db.entities.IUId;
 
 public class GenericFragmentAdapter<T extends IUId<String>, DerivedFragment extends GenericArticlesFragment> extends FragmentStateAdapter {

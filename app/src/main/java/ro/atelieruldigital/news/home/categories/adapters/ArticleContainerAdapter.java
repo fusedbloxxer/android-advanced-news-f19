@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import ro.atelieruldigital.news.R;
 import ro.atelieruldigital.news.home.categories.viewholders.ArticleContainerViewHolder;
+import ro.atelieruldigital.news.home.generic.adapters.ContainerAdapter;
 import ro.atelieruldigital.news.model.db.entities.Article;
 
 public class ArticleContainerAdapter extends ContainerAdapter<String, Article, ArticleContainerViewHolder> {
