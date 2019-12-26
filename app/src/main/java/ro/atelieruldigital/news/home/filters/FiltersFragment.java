@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,11 +34,20 @@ public class FiltersFragment extends LoadingFragment implements OnToggleUpdateSe
 
     private NewsViewModel mNewsViewModel;
     private SelectedViewModel mSelectViewModel;
-    private LiveData<List<Source>> mAllSources;
-    private LiveData<List<Country>> mAllCountries;
-    private LiveData<List<Language>> mAllLanguages;
-    private LiveData<List<Category>> mAllCategories;
-    private LiveData<HashMap<String, HashMap<String, Boolean>>> mHashMap;
+
+    private Observer<List<Source>> mSourceListObserver;
+    private Observer<List<Country>> mCountriesListObserver;
+    private Observer<List<Language>> mLanguagesListObserver;
+    private Observer<List<Article>> mArticleObserver;
+    private Observer<List<Category>> mCategoriesListObserver;
+    private Observer<HashMap<String, HashMap<String, Boolean>>> mCheckboxObserver;
+
+    private LiveData<List<Source>> mSourcesLiveData;
+    private LiveData<List<Article>> mArticlesLiveData;
+    private LiveData<List<Country>> mCountriesLiveData;
+    private LiveData<List<Language>> mLanguagesLiveData;
+    private LiveData<List<Category>> mCategoriesLiveData;
+    private LiveData<HashMap<String, HashMap<String, Boolean>>> mHashMapLiveData;
 
     public FiltersFragment() {
         super(R.layout.fragment_filters);
@@ -61,12 +71,13 @@ public class FiltersFragment extends LoadingFragment implements OnToggleUpdateSe
                 .setTitle("Choose Filters")
                 .setView(dialogView)
                 .setPositiveButton("Accept", (dialog, which) -> {
-                    removeAlertDialogObservers();
-                    setObservers(subAdapter);
+                    mSelectViewModel.setDialogShown(false);
+                    attachArticlesObserver(subAdapter);
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> removeAlertDialogObservers())
-                .setOnDismissListener(dialog -> removeAlertDialogObservers())
-                .setOnCancelListener(dialog -> removeAlertDialogObservers())
+                .setNegativeButton("Cancel", ((dialog, which) -> {
+                    mSelectViewModel.setDialogShown(false);
+                    removeDialogObservers();
+                }))
                 .create();
 
         RecyclerView container = dialogView.findViewById(R.id.container_recycler_view);
@@ -74,68 +85,106 @@ public class FiltersFragment extends LoadingFragment implements OnToggleUpdateSe
         SelectContainerAdapter selectContainerAdapter = new SelectContainerAdapter(this);
         container.setAdapter(selectContainerAdapter);
 
-        mHashMap = mSelectViewModel.getAllHashMap();
-        mAllSources = mNewsViewModel.getAllSources();
-        mAllCountries = mNewsViewModel.getAllCountries();
-        mAllLanguages = mNewsViewModel.getAllLanguages();
-        mAllCategories = mNewsViewModel.getAllCategories();
-
         filterButton.setOnClickListener(v -> {
-            setAlertDialogObservers(selectContainerAdapter);
-            filterDialog.show();
+            mSelectViewModel.setDialogShown(true);
+            showDialog(filterDialog);
         });
 
-        setObservers(subAdapter);
+        setObservers(selectContainerAdapter, subAdapter);
+        attachArticlesObserver(subAdapter);
+
+        if (mSelectViewModel.isDialogShown()) {
+            showDialog(filterDialog);
+        }
     }
 
-    private void removeAlertDialogObservers() {
-        mAllSources.removeObservers(this);
-        mAllCountries.removeObservers(this);
-        mAllLanguages.removeObservers(this);
-        mAllCategories.removeObservers(this);
+    private void showDialog(AlertDialog filterDialog) {
+        attachDialogObservers();
+        filterDialog.show();
     }
 
-    private void setAlertDialogObservers(SelectContainerAdapter selectContainerAdapter) {
-        mAllSources.observe(this, sources -> {
+    private void setObservers(SelectContainerAdapter selectContainerAdapter, SubAdapter<Article, ArticleViewHolder> subAdapter) {
+        mSourceListObserver = sources -> {
             for (Source source : sources) {
                 mSelectViewModel.addOptions(SelectedViewModel.SOURCES, source.getId());
             }
-        });
-
-        mAllCategories.observe(this, categories -> {
+        };
+        mCategoriesListObserver = categories -> {
             for (Category category : categories) {
                 mSelectViewModel.addOptions(SelectedViewModel.CATEGORIES, category.getId());
             }
-        });
-
-        mAllCountries.observe(this, countries -> {
+        };
+        mCountriesListObserver = countries -> {
             for (Country country : countries) {
                 mSelectViewModel.addOptions(SelectedViewModel.COUNTRIES, country.getId());
             }
-        });
-
-        mAllLanguages.observe(this, languages -> {
+        };
+        mLanguagesListObserver = languages -> {
             for (Language language : languages) {
                 mSelectViewModel.addOptions(SelectedViewModel.LANGUAGES, language.getId());
             }
-        });
+        };
 
-        mHashMap.observe(this, selectContainerAdapter::setStringDoubleHash);
+        // Update dialog
+        mCheckboxObserver = selectContainerAdapter::setStringDoubleHash;
+
+        // Update article list.
+        mArticleObserver = articles -> {
+            subAdapter.setManyList(articles);
+            setProgress(articles.size() != 0);
+        };
     }
 
-    private void setObservers(SubAdapter<Article, ArticleViewHolder> subAdapter) {
-        if (subAdapter.getItemCount() == 0) {
+    private void attachDialogObservers() {
+        removeDialogObservers();
+
+        mSourcesLiveData = mNewsViewModel.getAllSources();
+        mHashMapLiveData = mSelectViewModel.getAllHashMap();
+        mCountriesLiveData = mNewsViewModel.getAllCountries();
+        mLanguagesLiveData = mNewsViewModel.getAllLanguages();
+        mCategoriesLiveData = mNewsViewModel.getAllCategories();
+
+        mHashMapLiveData.observe(this, mCheckboxObserver);
+        mSourcesLiveData.observe(this, mSourceListObserver);
+        mCountriesLiveData.observe(this, mCountriesListObserver);
+        mLanguagesLiveData.observe(this, mLanguagesListObserver);
+        mCategoriesLiveData.observe(this, mCategoriesListObserver);
+    }
+
+    private void removeDialogObservers() {
+        if (mSourcesLiveData != null) {
+            mSourcesLiveData.removeObserver(mSourceListObserver);
+        }
+        if (mCategoriesLiveData != null) {
+            mCategoriesLiveData.removeObserver(mCategoriesListObserver);
+        }
+        if (mCountriesLiveData != null) {
+            mCountriesLiveData.removeObserver(mCountriesListObserver);
+        }
+        if (mLanguagesLiveData != null) {
+            mLanguagesLiveData.removeObserver(mLanguagesListObserver);
+        }
+        if (mHashMapLiveData != null) {
+            mHashMapLiveData.removeObserver(mCheckboxObserver);
+        }
+    }
+
+    private void attachArticlesObserver(SubAdapter<Article, ArticleViewHolder> subAdapter) {
+        if (subAdapter.getItemCount() == 0 && getProgress()) {
             setProgress(false);
         }
-        mNewsViewModel.getArticlesByFilters(
+
+        if (mArticlesLiveData != null) {
+            mArticlesLiveData.removeObserver(mArticleObserver);
+        }
+
+        mArticlesLiveData = mNewsViewModel.getArticlesByFilters(
                 mSelectViewModel.filters(SelectedViewModel.LANGUAGES),
                 mSelectViewModel.filters(SelectedViewModel.CATEGORIES),
                 mSelectViewModel.filters(SelectedViewModel.COUNTRIES),
-                mSelectViewModel.filters(SelectedViewModel.SOURCES))
-                .observe(this, articles -> {
-                    subAdapter.setManyList(articles);
-                    setProgress(articles.size() != 0);
-                });
+                mSelectViewModel.filters(SelectedViewModel.SOURCES));
+
+        mArticlesLiveData.observe(this, mArticleObserver);
     }
 
     @Override

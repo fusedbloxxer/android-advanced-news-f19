@@ -23,6 +23,10 @@ public abstract class SubAdapter<Many, ViewHolder extends RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
+    public List<Many> getManyList() {
+        return this.manyList;
+    }
+
     @Override
     public int getItemCount() {
         return manyList.size();

@@ -16,6 +16,7 @@ import ro.atelieruldigital.news.home.generic.LoadingViewModel;
 public abstract class LoadingFragment extends BaseFragment {
 
     private int mLayoutResourceId;
+    private LoadingViewModel mLoadingViewModel;
 
     protected LoadingFragment(int layoutResourceId) {
         this.mLayoutResourceId = layoutResourceId;
@@ -32,11 +33,16 @@ public abstract class LoadingFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         ProgressBar progressBar = view.findViewById(R.id.progress_bar);
-        ViewModelProviders.of(this).get(LoadingViewModel.class).isLoaded()
-                .observe(this, loaded -> progressBar.setVisibility(loaded ? View.GONE : View.VISIBLE));
+        mLoadingViewModel = ViewModelProviders.of(this).get(LoadingViewModel.class);
+        mLoadingViewModel.isLoaded().observe(this,
+                loaded -> progressBar.setVisibility(loaded ? View.GONE : View.VISIBLE));
     }
 
     protected final void setProgress(Boolean loaded) {
-        ViewModelProviders.of(this).get(LoadingViewModel.class).setLoaded(loaded);
+        mLoadingViewModel.setLoaded(loaded);
+    }
+
+    protected final Boolean getProgress() {
+        return mLoadingViewModel.isLoaded().getValue();
     }
 }

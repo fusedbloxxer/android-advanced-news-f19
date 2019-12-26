@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -138,25 +137,23 @@ public class NewsRepository {
             public void onResponse(@NotNull Call<SourcesResponse> call, @NotNull Response<SourcesResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     NewsDatabase.getDatabaseWriteExecutor().execute(() -> {
-                        newsDatabase.sourceDao().insertObjects(
-                                response.body()
-                                        .getSources()
-                                        .stream()
-                                        .filter(source -> {
-                                            for (String s : sources) {
-                                                if (s.equals(source.getId())) {
-                                                    return true;
-                                                }
-                                            }
-                                            return false;
-                                        })
-                                        .collect(Collectors.toList())
-                        );
+                        List<Source> sourceList = response.body().getSources();
+                        for (int i = 0; i < sourceList.size(); i++) {
+                            for (String source : sources) {
+                                if (!sourceList.get(i).equals(source)) {
+                                    sourceList.remove(i);
+                                    i--; break;
+                                }
+                            }
+                        }
+                        newsDatabase.sourceDao().insertObjects(sourceList);
                         newsWebService.queryArticlesBySources(sources).enqueue(new Callback<ArticlesResponse>() {
                             @Override
                             public void onResponse(@NotNull Call<ArticlesResponse> call, @NotNull Response<ArticlesResponse> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    newsDatabase.articleDao().insertObjects(response.body().getArticles());
+                                    NewsDatabase.getDatabaseWriteExecutor().execute(() -> {
+                                        newsDatabase.articleDao().insertObjects(response.body().getArticles());
+                                    });
                                 }
                             }
 

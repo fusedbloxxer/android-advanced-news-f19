@@ -12,6 +12,8 @@ public class SelectedViewModel extends ViewModel {
     public static final String SOURCES = "sources";
     public static final String LANGUAGES = "languages";
     public static final String COUNTRIES = "countries";
+
+    private boolean dialogShown;
     private MutableLiveData<HashMap<String, HashMap<String, Boolean>>> allHashMap;
 
     public SelectedViewModel() {
@@ -20,6 +22,14 @@ public class SelectedViewModel extends ViewModel {
         allHashMap.getValue().put(LANGUAGES, new HashMap<>());
         allHashMap.getValue().put(COUNTRIES, new HashMap<>());
         allHashMap.getValue().put(SOURCES, new HashMap<>());
+    }
+
+    public boolean isDialogShown() {
+        return dialogShown;
+    }
+
+    void setDialogShown(boolean dialogShown) {
+        this.dialogShown = dialogShown;
     }
 
     public void addOptions(String filterType, String selection) {

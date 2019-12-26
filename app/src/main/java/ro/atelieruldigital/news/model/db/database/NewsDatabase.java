@@ -62,7 +62,6 @@ public abstract class NewsDatabase extends RoomDatabase {
     private static NewsDatabase buildDatabase(final Context context) {
         return Room.databaseBuilder(context.getApplicationContext(),
                 NewsDatabase.class, "news_database")
-                .fallbackToDestructiveMigration()
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
