@@ -9,7 +9,7 @@ import ro.atelieruldigital.news.model.ws.response.ArticlesResponse;
 import ro.atelieruldigital.news.model.ws.response.SourcesResponse;
 
 public class NewsWebService {
-    private static final String API_KEY = "00d2ab26016f475eac3512ab6e0a9528";
+    private static final String API_KEY = "YOUR_API_KEY_FROM_NEWS_API";
     public static final String MAX_PAGE_SIZE = "100";
     public static final int MAX_SOURCES = 20;
 
